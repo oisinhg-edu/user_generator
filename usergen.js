@@ -3,7 +3,7 @@ import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 
 // use csv
-const fileContent = fs.readFileSync('hobbylist.csv', 'utf-8');
+const fileContent = fs.readFileSync('data/hobbylist.csv', 'utf-8');
 
 const hobbyList = parse(fileContent, {
     columns: true,
@@ -13,7 +13,7 @@ const hobbyList = parse(fileContent, {
 // email arrays
 const localParts = [];
 
-const loadedDomains = fs.readFileSync('emaildomains.txt', 'utf-8');
+const loadedDomains = fs.readFileSync('data/emaildomains.txt', 'utf-8');
 const domains = loadedDomains.split('\n').map(line => line.trim()).filter(line => line !== '');
 
 const alphaNumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
