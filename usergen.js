@@ -2,6 +2,9 @@ import { uniqueNamesGenerator, adjectives, names } from 'unique-names-generator'
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 
+// stores unique values
+const seenName = new Set();
+
 // use csv
 const fileContent = fs.readFileSync('data/hobbylist.csv', 'utf-8');
 
@@ -17,6 +20,7 @@ const loadedDomains = fs.readFileSync('data/emaildomains.txt', 'utf-8');
 const domains = loadedDomains.split('\n').map(line => line.trim()).filter(line => line !== '');
 
 const alphaNumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
 const thirty_day_months = [4, 6, 9, 11];
 const account_status_enums = ['standard', 'premium'];
 
@@ -49,11 +53,7 @@ const numUsers = parseInt(process.argv[2]) || 1; // default 1
 
 function gen_user_data() {
 
-    let username = uniqueNamesGenerator({
-        dictionaries: [adjectives, names],
-        separator: '',
-        style: 'capital'
-    });
+    let username = getUniqueUsername();
 
     let email = gen_email();
 
@@ -65,18 +65,47 @@ function gen_user_data() {
 
     let dob = gen_date_string(1920, 2011);
 
-    let account_status = account_status_enums[Math.floor(Math.random() * account_status_enums.length)];;
+    let account_status = choose_from_array(account_status_enums);
 
     let user_data = `('${username}', '${email}', '${password}', '${bio}.', '${joined_at}', '${dob}', '${account_status}')`;
 
     return user_data;
 }
 
+function gen_username() {
+    let base = uniqueNamesGenerator({
+        dictionaries: [adjectives, names],
+        separator: '',
+        style: 'capital'
+    });
+
+    let suffix = '';
+
+    for (let i = 0; i < 3; i++) {
+        suffix += choose_from_array(alphaNumeric);
+    }
+
+    return base + suffix;
+}
+
+function getUniqueUsername() {
+    let name;
+    
+    do {
+        name = gen_username();
+    }
+    while (seenName.has(name));
+    
+    seenName.add(name);
+
+    return name;
+}
+
 function gen_email() {
     let local = '';
 
     for (let i = 0; i < 8; i++) {
-        let val = alphaNumeric[Math.floor(Math.random() * alphaNumeric.length)];
+        let val = choose_from_array(alphaNumeric);
         local += val;
     }
 
@@ -138,14 +167,14 @@ function gen_password_string() {
     let hash = '';
 
     for (let i = 0; i < 22; i++) {
-        let val = alphaNumeric[Math.floor(Math.random() * alphaNumeric.length)];
+        let val = choose_from_array(alphaNumeric);
         hash += val;
     }
 
     let seed = '';
 
     for (let i = 0; i < 31; i++) {
-        let val = alphaNumeric[Math.floor(Math.random() * alphaNumeric.length)];
+        let val = choose_from_array(alphaNumeric);
         seed += val;
     }
 
@@ -158,10 +187,15 @@ function gen_bio() {
         dictionaries: [adjectives]
     });
 
-    let hobby = bioHobbies[Math.floor(Math.random() * bioHobbies.length)];
-    let ending = bioEndings[Math.floor(Math.random() * bioEndings.length)];
+    let hobby = choose_from_array(bioHobbies);
+    let ending = choose_from_array(bioEndings);
 
     return `I am a ${adj} person who enjoys ${hobby}, ${ending}`;
+}
+
+// pick one value from an array or a string
+function choose_from_array(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
 if (numUsers === 1) {
