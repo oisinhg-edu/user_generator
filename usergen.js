@@ -61,9 +61,9 @@ function genUserData() {
 
     let bio = genBio();
 
-    let joined_at = genTimestampString();
+    let joined_at = genTimestampString(2015, 2025);
 
-    let dob = genDateString(1920, 2011);
+    let dob = genDateString(1965, 2011);
 
     // 15% chance for a premium user
     let account_status = Math.random() < 0.15 ? 'premium' : 'standard';
@@ -127,8 +127,8 @@ function genBio() {
     return `I am a ${adj} person who enjoys ${hobby}, ${ending}`;
 }
 
-function genTimestampString() {
-    let date = genDateString(2010, 2025);
+function genTimestampString(min_year, max_year) {
+    let date = genDateString(min_year, max_year);
 
     let hour = Math.floor(Math.random() * 24);
     let mins = Math.floor(Math.random() * 60);
