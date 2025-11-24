@@ -44,14 +44,14 @@ Run the script with node:
 ```bash
 node usergen.js
 ```
-A users.sql file will be created in the user_generator folder, ready to copy into mySql.
+A `users.sql` file will be created in the `user_generator` folder, ready to copy into mySql.
 
 To generate multiple users, provide a CLI argument:
 ```bash 
 node usergen.js X
 ```
-where X is the amount of users to generate (integer).
+where `X` is the amount of users to generate (integer).
 
 ## Acknowledgments
-[unique-names-generator]{https://www.npmjs.com/package/unique-names-generator} — for easy username generation
-[csv-parse]{https://www.npmjs.com/package/csv-parse} - for parsing csv
+[unique-names-generator](https://www.npmjs.com/package/unique-names-generator) — for easy username generation  
+[csv-parse](https://www.npmjs.com/package/csv-parse) - for parsing csv
