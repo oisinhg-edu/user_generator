@@ -4,7 +4,8 @@ A Node.js script to generate randomized user data for database seeding or testin
 
 Generates then writes to a file realistic-looking user data including usernames, passwords, emails, bios, account creation timestamps, date of birth, and account status.
 
-This script is specifically for a database where the user table includes the following columns: ('username', 'email', 'password', 'bio', 'joined_at', 'dob', 'status')
+This script is specifically for a database where the user table includes the following columns: ('username', 'email', 'password', 'bio', 'joined_at', 'dob', 'status').
+
 ---
 
 ## Features
