@@ -39,7 +39,7 @@ cd user-generator
 npm install
 ```
 
-### Usage
+## Usage
 Run the script with node:
 ```bash
 node usergen.js
@@ -52,6 +52,6 @@ node usergen.js X
 ```
 where X is the amount of users to generate (integer).
 
-### Acknowledgments
+## Acknowledgments
 [unique-names-generator]{https://www.npmjs.com/package/unique-names-generator} — for easy username generation
 [csv-parse]{https://www.npmjs.com/package/csv-parse} - for parsing csv
