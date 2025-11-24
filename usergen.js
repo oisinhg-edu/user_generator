@@ -22,9 +22,9 @@ const domains = loadedDomains.split('\n').map(line => line.trim()).filter(line =
 const alphaNumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 const thirty_day_months = [4, 6, 9, 11];
-const account_status_enums = ['standard', 'premium'];
 
 const bioHobbies = hobbyList.map(r => r['Hobby-name']);
+
 const bioEndings = [
     'looking for friends',
     'love to travel',
@@ -65,7 +65,8 @@ function gen_user_data() {
 
     let dob = gen_date_string(1920, 2011);
 
-    let account_status = choose_from_array(account_status_enums);
+    // 15% chance for a premium user
+    let account_status = Math.random() < 0.15 ? 'premium' : 'standard';
 
     let user_data = `('${username}', '${email}', '${password}', '${bio}.', '${joined_at}', '${dob}', '${account_status}')`;
 
