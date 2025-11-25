@@ -1,12 +1,19 @@
 import { uniqueNamesGenerator, adjectives, names } from 'unique-names-generator';
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // stores unique values
 const seenName = new Set();
 
 // use csv
-const fileContent = fs.readFileSync('data/hobbylist.csv', 'utf-8');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const hobbyPath = path.join(__dirname, 'data/hobbylist.csv');
+
+const fileContent = fs.readFileSync(hobbyPath, 'utf-8');
 
 const hobbyList = parse(fileContent, {
     columns: true,
@@ -16,7 +23,9 @@ const hobbyList = parse(fileContent, {
 // email arrays
 const localParts = [];
 
-const loadedDomains = fs.readFileSync('data/emaildomains.txt', 'utf-8');
+const domainPath = path.join(__dirname, 'data/emaildomains.txt');
+
+const loadedDomains = fs.readFileSync(domainPath, 'utf-8');
 const domains = loadedDomains.split('\n').map(line => line.trim()).filter(line => line !== '');
 
 const alphaNumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -178,15 +187,28 @@ function randomString(length, alphabet = alphaNumeric) {
     return s;
 }
 
-if (numUsers === 1) {
-    fs.writeFileSync('users.sql', genUserData());
+function resetUsers() {
+    seenName.clear();
 }
-else {
-    let outputArr = [];
+// insert into `user` ( `username`, `email`, `password`, `bio`, `joined_at`, `dob`, `status`) values\n
 
-    for (let i = 0; i < numUsers; i++) {
-        outputArr.push(genUserData());
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    if (numUsers === 1) {
+        fs.writeFileSync('data.sql', 'insert into `user` ( `username`, `email`, `password`, `bio`, `joined_at`, `dob`, `status`) values\n' + genUserData() + ';');
     }
+    else {
+        let outputArr = [];
 
-    fs.writeFileSync('users.sql', outputArr.join(',\n'));
+        for (let i = 0; i < numUsers; i++) {
+            outputArr.push(genUserData());
+        }
+
+        fs.writeFileSync('data.sql', 'insert into `user`(`username`, `email`, `password`, `bio`, `joined_at`, `dob`, `status`)\nvalues\n' + outputArr.join(',\n') + ';');
+    }
+}
+
+export {
+    genUserData,
+    genTimestampString,
+    resetUsers
 }
